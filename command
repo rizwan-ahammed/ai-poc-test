@@ -1,6 +1,8 @@
 #Install Kserve
 https://github.com/rizwan-ahammed/ai-poc-test/blob/main/quick_install.sh
 
+#connect cluster 
+gcloud container clusters get-credentials ai-poc-cluster-v32 --region us-central1 --project gcp-poc-321808
 
 # NodeGroup
  gcloud container node-pools create gpu-pool-1 \
@@ -12,7 +14,7 @@ https://github.com/rizwan-ahammed/ai-poc-test/blob/main/quick_install.sh
    --disk-size 150GB \
    --disk-type pd-standard
 
-
+# Get gpu 
 kubectl get nodes -o json | jq '.items[] | {name: .metadata.name, gpu: .status.capacity."nvidia.com/gpu"}'
 
 
