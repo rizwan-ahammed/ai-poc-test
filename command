@@ -12,6 +12,10 @@ https://github.com/rizwan-ahammed/ai-poc-test/blob/main/quick_install.sh
    --disk-size 150GB \
    --disk-type pd-standard
 
+
+kubectl get nodes -o json | jq '.items[] | {name: .metadata.name, gpu: .status.capacity."nvidia.com/gpu"}'
+
+
 # Deploy the InferenceService - GenAI
 
 kubectl apply -n kserve-test -f - <<EOF
