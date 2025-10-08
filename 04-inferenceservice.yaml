@@ -1,0 +1,45 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: huggingface-llama3
+  namespace: kserve
+spec:
+  predictor:
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: huggingface
+      args:
+        - --model_name=dialogpt
+        - --model_id=microsoft/DialoGPT-medium
+        - --max-model-len=1024
+        - --kv-transfer-config
+        - '{"kv_connector":"LMCacheConnectorV1", "kv_role":"kv_both"}'
+        - --enable-chunked-prefill
+      env:
+        - name: LMCACHE_USE_EXPERIMENTAL
+          value: "True"
+        - name: LMCACHE_CONFIG_FILE
+          value: /lmcache/lmcache_config.yaml
+        - name: LMCACHE_LOG_LEVEL
+          value: "INFO"
+      resources:
+        limits:
+          cpu: 4
+          memory: 24Gi 
+          nvidia.com/gpu: "1"
+        requests:
+          cpu: 2
+          memory: 8Gi
+          nvidia.com/gpu: "1"
+      volumeMounts:
+        - name: lmcache-config-volume
+          mountPath: /lmcache
+          readOnly: true
+    volumes:
+      - name: lmcache-config-volume
+        configMap:
+          name: lmcache-config
+          items:
+            - key: lmcache_config.yaml
+              path: lmcache_config.yaml
