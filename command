@@ -40,7 +40,7 @@ spec:
           memory: 6Gi
           nvidia.com/gpu: "1"
         requests:
-          cpu: "500m"
+          cpu: "50m"
           memory: 256Mi
           nvidia.com/gpu: "1"
 EOF
