@@ -1,6 +1,17 @@
 #Install Kserve
 https://github.com/rizwan-ahammed/ai-poc-test/blob/main/quick_install.sh
 
+
+# NodeGroup
+ gcloud container node-pools create gpu-pool-1 \
+   --cluster ai-poc-cluster-v32 --region us-central1 \
+   --node-locations us-central1-b \
+   --machine-type g2-standard-4 --num-nodes 1 \
+   --accelerator type=nvidia-l4,count=1,gpu-driver-version=default,gpu-sharing-strategy=time-sharing,max-shared-clients-per-gpu=32 \
+   --enable-autoupgrade \
+   --disk-size 150GB \
+   --disk-type pd-standard
+
 # Deploy the InferenceService - GenAI
 
 kubectl apply -n kserve-test -f - <<EOF
